@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" 
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.dao.StudentMapper">
+
+	<resultMap type="com.bean.Student" id="studentMap">
+		<id property="id" column="id"/>
+		<result property="sName" column="sName"/>
+		<result property="birthday" column="birthday"/>
+		<result property="gender" column="gender"/>
+		<result property="telephone" column="telephone"/>
+		<result property="email" column="email"/>
+		<result property="classId" column="classId"/>
+		
+		
+		<association property="classesInfo" column="classId" select="selectId"></association>
+	</resultMap>
+	
+	
+	<resultMap type="com.bean.Classes" id="classesMap">
+		<id property="id" column="id"/>
+		<result property="cName" column="cName"/>
+	</resultMap>
+
+	<select id="selectId" resultMap="classesMap">
+		select * from classes
+		where id = #{0}
+	</select>
+	
+	<update id="update" parameterType="com.bean.Student">
+		update student
+		<set>
+			<if test="sName != null">sName = #{sName},</if>
+			<if test="birthday != null">birthday = #{birthday},</if>
+			<if test="gender != null">gender = #{gender},</if>
+			<if test="telephone != null">telephone = #{telephone},</if>
+			<if test="email != null">email = #{email},</if>
+			<if test="classId != null">classId = #{classId},</if>
+		</set>
+		where id = #{id}
+	</update>
+	
+	<select id="select" parameterType="com.bean.Student" resultMap="studentMap">
+		select * 
+		from student  
+		<where>
+			<if test="id != null">and id = #{id}</if>
+		</where>
+		order by id
+	</select>
+</mapper>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
